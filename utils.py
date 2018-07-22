@@ -14,6 +14,22 @@ from clarifai.rest import Image as ClImage
 import pandas as pd
 
 def set_params(parser):
+    """
+    Parse, add and describe arguments using ArgumentParser
+    
+    Parameters:
+    ----------
+        parser: a ArgumentParser object
+    
+    Returns:
+    --------
+        profile:    name of the Instagram profile.
+        num:        number of images to download.
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+        mode:       To specify the usage mode of the pipeline
+    
+    """
     
     parser.add_argument('-p','--profile', help='specify Instagram profile name')
     parser.add_argument('-n','--num', help='specify num of images to download')
@@ -32,11 +48,42 @@ def set_params(parser):
     return profile, num, startdate, enddate, mode
 
 def format_datetime(format1, startdate, enddate):
+    """
+    Specify format of the input date given by the user
+    
+    Parameters:
+    ----------
+        format1:    specify the format of datetime object.
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+    
+    Returns:
+    --------
+        
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+    
+    """
     startdate = datetime.datetime.strptime(startdate, format1).date()
     enddate = datetime.datetime.strptime(enddate, format1).date()
     return startdate, enddate
 
 def set_download_dir(startdate, enddate):
+    """
+    Create the directory where the scraped images will be stored.
+    
+    Parameters:
+    ----------
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+    
+    Returns:
+    --------
+        
+        output:     The path of the output directory
+    
+    """
+    
     output = 'images_'+str(startdate)+ '_' +str(enddate)
     if not os.path.exists(output):
         os.makedirs(output)
@@ -45,6 +92,20 @@ def set_download_dir(startdate, enddate):
 
 def scrape_images(profile, num, startdate, enddate, out_dir):
     """
+    Function to scrape images from Instagram using Instalooter
+    
+    Parameters:
+    ----------
+        profile:    name of the Instagram profile.
+        num:        number of images to download.
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+    
+    Returns:
+    --------
+        
+        output:     The path of the output directory
+    
     """
     #output = 'images_'+str(startdate)+ '_' +str(enddate)
     looter = ProfileLooter(profile)
@@ -58,12 +119,37 @@ def scrape_images(profile, num, startdate, enddate, out_dir):
     
 def extract_average_color(directory, filetype):
     """
+    Function to extract the average color and modified images to feed as imput for claasification
+    
+    Parameters:
+    ----------
+        profile:    name of the Instagram profile.
+        num:        number of images to download.
+        startdate:  Most recent date from which you wanna start downloading.
+        enddate:    Date to specify the end of timeframe.
+    
+    Returns:
+    --------
+        
+        The modified images and averaged colors are returned
     """
     milpy.directory_image_average(directory, filetype)
 
     
 def classify_images(input_dir, filetype, model_name='color'):
     """
+    Function to detect color using Clarifai API
+    
+    Parameters:
+    ----------
+        input_dir:    name of the folder containing Instagram scraped images or Milpy images.
+        filetype:     mention the extension of the image files..eg. '.jpg'
+        model:        specify name of the Clarifai model.
+    
+    Returns:
+    --------
+        
+        The .csv or .xlsx file containing a dataframe with columns of image name, colors in that image and hex codes
     """
    
     # Create your API key in your account's `Manage your API keys` page:
