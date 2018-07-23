@@ -1,3 +1,8 @@
+# utils.py v 1.0
+# Date: 07-22-2018
+# Author: Amit Gupta
+
+
 from instalooter.looters import ProfileLooter
 import argparse
 import datetime
