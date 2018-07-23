@@ -1,3 +1,7 @@
+# unlimited_scraper.py v 1.0
+# Date: 07-22-2018
+# Author: Amit Gupta
+
 import argparse
 from utils import set_params, set_download_dir, format_datetime, scrape_images, extract_average_color, classify_images, df_to_csv, df_to_excel
     
