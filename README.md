@@ -1,6 +1,6 @@
 # Pegasus
 
-## Project 1: Fashion Trend Predictor**
+## Project 1: Fashion Trend Predictor
 
 This project aims at building a Fashion Trend Predictor. For the purpose of the trend prediction, the repo contains the code for the prediction pipeline which consists of the following **3** parts:
   1. **The Instagram Scraper**: using Instalooter API-less library has the ability to download `num` amount of images from any public `profile` on Instagram within a `timeframe`
