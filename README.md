@@ -11,5 +11,5 @@ This project aims at building a Fashion Trend Predictor. For the purpose of the 
   1. Clone the repo.
   2. Download the requirements using the requirements.txt file using the following command:
   </br>`$ pip3 install -r requirements.txt`
-  3. Run the following command to scrape the images (mode `0`) and use (-m 1) to detect colors of the image and export the report:
+  3. Run the following command to scrape the images (mode `0`) and use (-m `1`) to detect colors of the image and export the report:
   </br>`$ python3 unlimited_scraper.py -p "mad_tesla" -n 30 -s '2018-03-09' -e '2017-03-09' -m 0 `
