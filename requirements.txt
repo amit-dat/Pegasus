@@ -1,0 +1,5 @@
+argparse==1.1
+instalooter==2.0.3
+datetime==4.5.0
+clarifai==2.2.3
+pandas==0.20.2
