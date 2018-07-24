@@ -2,7 +2,6 @@
 # Date: 07-22-2018
 # Author: Amit Gupta
 
-
 from instalooter.looters import ProfileLooter
 import argparse
 import datetime
@@ -41,6 +40,8 @@ def set_params(parser):
     parser.add_argument('-s','--startdate', help='specify startdate')
     parser.add_argument('-e','--enddate', help='specify enddate')
     
+    parser.add_argument('-S','--season', help='specify season')
+    
     parser.add_argument('-m','--mode', help='specify the mode for the pipeline functionality. Eg. 0: for complete Pipeline')
     args = parser.parse_args()
     
@@ -49,8 +50,24 @@ def set_params(parser):
     startdate = args.startdate
     enddate = args.enddate
     mode = args.mode
+    season = args.season
     
-    return profile, num, startdate, enddate, mode
+    return profile, num, startdate, enddate, mode, season
+
+def conv_season_to_dates(season):
+    """
+    Convert the season specified by the user into start and end dates 
+    """
+    # TODO: the function only contains the specific start and end 
+    # dates for different seasons. Code yet to be completed for returning
+    # proper dates
+    
+    seasons = [('winter', (date(Y,  1,  1),  date(Y,  3, 20))),
+           ('spring', (date(Y,  3, 21),  date(Y,  6, 20))),
+           ('summer', (date(Y,  6, 21),  date(Y,  9, 22))),
+           ('autumn', (date(Y,  9, 23),  date(Y, 12, 20))),
+           ('winter', (date(Y, 12, 21),  date(Y, 12, 31)))]
+
 
 def format_datetime(format1, startdate, enddate):
     """
@@ -202,3 +219,59 @@ def df_to_csv(df):
 def df_to_excel(df):
     df.to_excel("color_detection_df.xlsx")
     
+    
+    
+###########################################
+### Training a season trend classifier ####
+###########################################
+
+
+def label_images(input_dir, filetype, season):
+    
+    """
+    Label images to be fed to Clarifai Model
+    """
+    # TODO: Figure out how to add concepts. 
+    # Assign them IDs and specify concepts and non concepts.
+    # figure out the bulk_create_images response error.
+    
+    seasons = ["spring","summer","fall", "winter"]
+    
+    concept = season
+    seasons.remove(str(season))
+    nonconcepts = seasons
+    print(concept)
+    print(nonconcepts)
+    
+    app = ClarifaiApp(api_key='f7e11a3064f8468087ca656dce9e7abc')
+    
+    images = [os.path.join(input_dir,i) for i in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir,i)) and i.endswith(filetype)]
+    
+    #print(app.inputs.get_all())
+    for image in app.inputs.get_all():
+        print(image.input_id)
+    
+    #app.concepts.bulk_create(['id1', 'id2','id3','id4'], ['spring', 'summer','fall', 'winter'])
+    
+    #df = pd.DataFrame(columns=['Image_Name','Colors','Hex_Numbers'])
+    img_list = []
+    #for count, picture in enumerate(images,1):
+    image = ClImage(url='https://samples.clarifai.com/metro-north.jpg', concepts=[concept], not_concepts=[nonconcepts])
+        #print(picture)
+        #image = ClImage(file_obj=open(str(picture),'rb'), concepts=[concept], not_concepts=[nonconcepts])
+        #img_list.append(image)
+    #print(img_list)  
+    #print(len(img_list))
+    #app.inputs.bulk_create_images([image])
+    
+    
+def create_model():
+    
+    """
+    Create model
+    """
+    # TODO: Incomplete code for creating the model
+   
+    app = ClarifaiApp(api_key='f7e11a3064f8468087ca656dce9e7abc')
+    
+    model = app.models.create('trends', concepts = seasons)
